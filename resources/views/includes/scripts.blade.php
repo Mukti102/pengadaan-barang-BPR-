@@ -19,7 +19,7 @@
  <script src="/assets/js/plugin/datatables/datatables.min.js"></script>
 
  <!-- Bootstrap Notify -->
- <script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+ {{-- <script src="/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script> --}}
 
  <!-- jQuery Vector Maps -->
  <script src="/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
@@ -27,6 +27,8 @@
 
  <!-- Sweet Alert -->
  <script src="/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
  <!-- Kaiadmin JS -->
  <script src="/assets/js/kaiadmin.min.js"></script>
@@ -35,6 +37,40 @@
  <script src="/assets/js/setting-demo.js"></script>
  <script src="/assets/js/demo.js"></script>
  <script>
+     $("#basic-datatables").DataTable({});
+
+     $(document).on('click', '.btn-delete', function(e) {
+         e.preventDefault();
+
+         let url = $(this).data('url');
+         let name = $(this).data('name') ?? 'this data';
+
+         Swal.fire({
+             title: 'Are you sure?',
+             text: `Hapus ${name}? Ini tidak bisa dikembalikan.`,
+             icon: 'warning',
+             showCancelButton: true,
+             confirmButtonColor: '#d33',
+             cancelButtonColor: '#6c757d',
+             confirmButtonText: 'Yes, delete it!',
+             cancelButtonText: 'Cancel'
+         }).then((result) => {
+             if (result.isConfirmed) {
+                 let form = $('<form>', {
+                     method: 'POST',
+                     action: url
+                 });
+
+                 form.append('@csrf');
+                 form.append('@method('DELETE')');
+
+                 $('body').append(form);
+                 form.submit();
+             }
+         });
+     });
+
+
      $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
          type: "line",
          height: "70",

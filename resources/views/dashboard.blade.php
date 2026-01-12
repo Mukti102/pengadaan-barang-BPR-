@@ -17,7 +17,9 @@
         <div class="main-panel">
             @include('partials.navbar')
             <div class="container">
-                @yield('content')
+                <div class="page-inner">
+                    @yield('content')
+                </div>
             </div>
             @include('partials.footer')
         </div>
