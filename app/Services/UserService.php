@@ -10,8 +10,6 @@ class UserService
 
     public function store(array $data): User
     {   
-    
-
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -27,7 +25,7 @@ class UserService
     }
 
     public function update(User $user, array $data): User
-    {
+    {   
         $payload = [
             'name' => $data['name'],
             'email' => $data['email'],

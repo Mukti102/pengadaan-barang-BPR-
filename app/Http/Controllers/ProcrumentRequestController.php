@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProcrumentRequest;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -18,8 +20,41 @@ class ProcrumentRequestController extends Controller
      */
     public function index()
     {
-        $procruments = ProcrumentRequest::with('user')->get();
+        $auth = Auth::user();
+        if ($auth->role == 'staf') {
+            $procruments = ProcrumentRequest::where('user_id', $auth->id)->get();
+        } else {
+            $procruments = ProcrumentRequest::with('user')->get();
+        }
         return view('pages.procrumentRequest.index', compact('procruments'));
+    }
+
+    public function print()
+    {
+        $procruments = ProcrumentRequest::with('user')->get();
+        $pdf =  Pdf::loadView('pages.procrumentRequest.print', [
+            'procruments' => $procruments
+        ]);
+        return $pdf->stream('document.pdf');
+    }
+// 
+    public function cetak($id)
+    {
+        $procrumentRequest = ProcrumentRequest::find($id);
+        $procrumentRequest->load('user', 'items');
+        $pdf =  Pdf::loadView('pages.procrumentRequest.cetak', [
+            'procrument' => $procrumentRequest
+        ]);
+        return $pdf->stream('document.pdf');
+        // if ($procrumentRequest->status == 'disetujui') {
+        //     $pdf =  Pdf::loadView('pages.procrumentRequest.cetak', [
+        //         'procrument' => $procrumentRequest
+        //     ]);
+        //     return $pdf->stream('document.pdf');
+        // } else {
+        //     toastify()->error('Pengajuan Pengadaan Belum Di setujui');
+        //     return redirect()->back();
+        // }
     }
 
     /**

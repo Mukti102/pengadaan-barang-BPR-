@@ -68,6 +68,7 @@ class UserController extends Controller
             $request->all()
         );
 
+            toastify()->success('Berhasil Di perbarui');
         return redirect()->back()->with('success', 'User berhasil diperbarui');
     }
 

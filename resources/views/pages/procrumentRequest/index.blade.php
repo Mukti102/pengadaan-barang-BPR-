@@ -8,9 +8,16 @@
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h1 class="card-title mb-0">Data Pengajuan Pengadaan</h1>
-                    <a href="{{ route('procrument-request.create') }}" class="btn btn-sm btn-primary">
-                        + Buat Pengajuan Pengadaan
-                    </a>
+                    <div class="d-flex gap-2">
+                        <a href="{{ route('procrument-request.create') }}" class="btn btn-sm btn-primary">
+                            + Buat Pengajuan Pengadaan
+                        </a>
+                        @if (Auth::user()->role == 'admin')
+                            <a href="{{ route('procrument.print') }}" class="btn btn-sm btn-warning">
+                                Cetak
+                            </a>
+                        @endif
+                    </div>
                 </div>
 
                 <div class="card-body">
@@ -51,21 +58,27 @@
 
                                         </td>
                                         <td>
-                                            <a href="{{ route('procrument-request.show', $procrument->id) }}"
-                                                class="btn btn-sm btn-info">
-                                                <i class="fas fa-eye"></i>
+                                            <div class="d-flex gap-1">
+                                                <a href="{{ route('procrument.cetak', $procrument->id) }}"
+                                                    class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-print"></i>
+                                                </a>
+                                                <a href="{{ route('procrument-request.show', $procrument->id) }}"
+                                                    class="btn btn-sm btn-info">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a href="{{ route('procrument-request.edit', $procrument->id) }}"
+                                                    class="btn btn-sm btn-warning">
+                                                    <i class="fas fa-edit"></i>
 
-                                            </a>
-                                            <a href="{{route('procrument-request.edit',$procrument->id)}}" class="btn btn-sm btn-warning">
-                                                <i class="fas fa-edit"></i>
+                                                </a>
+                                                <button type="button" class="btn btn-sm  btn-danger btn-delete"
+                                                    data-url="{{ route('procrument-request.destroy', $procrument->id) }}"
+                                                    data-name="{{ $procrument->name }}">
+                                                    <i class="fas fa-trash"></i>
 
-                                            </a>
-                                            <button type="button" class="btn btn-sm  btn-danger btn-delete"
-                                                data-url="{{ route('procrument-request.destroy', $procrument->id) }}"
-                                                data-name="{{ $procrument->name }}">
-                                                <i class="fas fa-trash"></i>
-
-                                            </button>
+                                                </button>
+                                            </div>
 
                                         </td>
 
